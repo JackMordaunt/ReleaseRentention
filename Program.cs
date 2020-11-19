@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -122,14 +122,14 @@ namespace ReleaseRetention
         public override string ToString()
         {
             return String.Format("{0}: {1} ({2}): {3}",
-                this.project.Name,
+                this.project.Name != null ? this.project.Name : this.release.ProjectId,
                 this.release.Id,
                 this.release.Version != null ? "v" + this.release.Version : "unversioned",
                 this.reason);
         }
     }
 
-    class Release
+    struct Release
     {
         public string Id { get; set; }
         public string ProjectId { get; set; }
@@ -137,7 +137,7 @@ namespace ReleaseRetention
         public DateTime Created { get; set; }
     }
 
-    class Deployment
+    struct Deployment
     {
         public string Id { get; set; }
         public string ReleaseId { get; set; }
@@ -145,13 +145,13 @@ namespace ReleaseRetention
         public string DeployedAt { get; set; }
     }
 
-    class Environment
+    struct Environment
     {
         public string Id { get; set; }
         public string Name { get; set; }
     }
 
-    class Project
+    struct Project
     {
         public string Id { get; set; }
         public string Name { get; set; }
