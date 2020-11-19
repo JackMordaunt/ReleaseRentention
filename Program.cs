@@ -10,31 +10,19 @@ namespace ReleaseRetention
     {
         static void Main(string[] args)
         {
-            Retainer r = Load();
-            if (args.Length > 0)
+            if (args.Length == 0)
             {
-                string path = args[0];
-                Console.Write("loading json files from {0}\n", Path.GetFullPath(path));
-                r = Load(path);
+                Console.Write("specify path to data files\n");
+                return;
             }
-            else
-            {
-                Console.Write("using baked in test data\n");
-            }
+            string path = Path.GetFullPath(args[0]);
+            Console.Write("loading json files from {0}\n", path);
+            Retainer r = Load(path);
             Console.Write("Releases to retain\n");
             foreach (var retained in r.Retain(1))
             {
                 Console.Write("  -> {0}\n", retained);
             }
-        }
-
-        // Load test data statically. 
-        static Retainer Load()
-        {
-            // TODO: hardcode some test data. 
-            return new Retainer
-            {
-            };
         }
 
         // Load test data from disk at the given path. 
