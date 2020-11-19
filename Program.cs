@@ -81,7 +81,7 @@ namespace ReleaseRetention
                 for (int ii = 0; ii < g.Releases.Count(); ii++)
                 {
                     Release r = g.Releases.ElementAt(ii);
-                    if (ii < n)
+                    if (ii < n && !g.Project.Equals(default(Project)))
                     {
                         retained.Add(new RetainedRelease
                         {
