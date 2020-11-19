@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -64,23 +64,28 @@ namespace ReleaseRetention
         public List<RetainedRelease> Retain(int n)
         {
             var retained = new List<RetainedRelease>();
-            foreach (Project p in this.projects)
+            // Note: Group by project id lets us handle the case where a release 
+            // is deployed but the project has been deleted. 
+            var groups = this.releases.GroupBy(
+                r => r.ProjectId,
+                r => r,
+                (projectId, group) => new
+                {
+                    Project = this.projects.Where((Project p) => p.Id == projectId).FirstOrDefault(),
+                    Releases = group.OrderByDescending((Release r) => r.Created),
+                });
+            foreach (var g in groups)
             {
-                // Grab the releases for this project ordered by most recent first. 
-                var releases = from r in this.releases
-                               where r.ProjectId == p.Id
-                               orderby r.Created descending
-                               select r;
                 // Record up to n releases to be retained. 
                 // Releases that are deployed are retained by default. 
-                for (int ii = 0; ii < releases.Count(); ii++)
+                for (int ii = 0; ii < g.Releases.Count(); ii++)
                 {
-                    Release r = releases.ElementAt(ii);
+                    Release r = g.Releases.ElementAt(ii);
                     if (ii < n)
                     {
                         retained.Add(new RetainedRelease
                         {
-                            project = p,
+                            project = g.Project,
                             release = r,
                             reason = String.Format("recency {0}/{1}", ii + 1, n),
                         });
@@ -94,7 +99,7 @@ namespace ReleaseRetention
                             Environment env = this.environments.Find((Environment env) => d.EnvironmentId == env.Id);
                             retained.Add(new RetainedRelease
                             {
-                                project = p,
+                                project = g.Project,
                                 release = r,
                                 reason = String.Format("currently deployed to {0}", env.Name),
                             });
