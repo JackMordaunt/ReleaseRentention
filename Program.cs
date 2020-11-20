@@ -10,16 +10,21 @@ namespace ReleaseRetention
     {
         static void Main(string[] args)
         {
-            if (args.Length == 0)
+            if (args.Length < 1)
             {
                 Console.Write("specify path to data files\n");
+                return;
+            }
+            if (args.Length < 2)
+            {
+                Console.Write("specify number of releases to retain\n");
                 return;
             }
             string path = Path.GetFullPath(args[0]);
             Console.Write("loading json files from {0}\n", path);
             Retainer r = Load(path);
             Console.Write("Releases to retain\n");
-            foreach (var retained in r.Retain(1))
+            foreach (var retained in r.Retain(int.Parse(args[1])))
             {
                 Console.Write("  -> {0}\n", retained);
             }
