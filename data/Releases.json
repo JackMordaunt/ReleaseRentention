@@ -46,5 +46,11 @@
     "ProjectId": "Project-3",
     "Version": "2.0.0",
     "Created": "2000-01-01T09:00:00"
+  },
+  {
+    "Id": "Release-9",
+    "ProjectId": "Project-3",
+    "Version": "2.0.1",
+    "Created": "2000-01-01T10:00:00"
   }
 ]
