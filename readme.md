@@ -10,6 +10,8 @@ For the sake of simplicity only dependency is the standard library.
 
 ## Algorithm
 
+### Retain Releases
+
 A release can be in 3 non-exclusive states:
 
 1. active: belongs to an active project
@@ -21,9 +23,15 @@ Retain `n` releases per project.
 Retain all deployed releases regardless of `n`.
 Do not retain any underployed orphans.
 
+### Retain Deployments
+
+1. group together project and environment data deployment-wise
+2. sort by recency (`DeployedAt`)
+3. take `n` most recent deployments
+
 ## Assumptions
 
-### Core Assumptions
+### Retain Releases
 
 - deployed releases should be retained
 
@@ -41,6 +49,11 @@ Do not retain any underployed orphans.
 - receny is preferred to deployment
 
   It is not clear whether recency should be preferred over deployment. If deployment is preferred then deployed releases would not consume `n`.
+
+### Retain Deployments
+
+- up to `n` deployments are retained for every project-environment pair
+- deleted projects and associated data are not retained
 
 ### Meta assumptions
 
