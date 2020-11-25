@@ -2,13 +2,19 @@
 
 > Retain releases based on recency.
 
+## Preamble
+
+Not familiar with nuanced C# idioms so if you see something weird syntax-wise, that's why!
+
+For the sake of simplicity only dependency is the standard library.
+
+## Algorithm
+
 A release can be in 3 non-exclusive states:
 
 1. active: belongs to an active project
 2. deployed: has an associated deployment
 3. orphaned: has no active project
-
-## Algorithm
 
 Sort releases by most recent first.
 Retain `n` releases per project.
@@ -17,7 +23,7 @@ Do not retain any underployed orphans.
 
 ## Assumptions
 
-Core assumptions:
+### Core Assumptions
 
 - deployed releases should be retained
 
@@ -36,10 +42,22 @@ Core assumptions:
 
   It is not clear whether recency should be preferred over deployment. If deployment is preferred then deployed releases would not consume `n`.
 
-Meta assumptions:
+### Meta assumptions
 
-- Simple CLI because small scope.
-- Read data of disk for convenience.
-- Data stored in flat List for two reasons:
+- simple command line interface
+
+  Library is abstracted to easy to plug into a different entry point eg an HTTP server.
+
+- read data of disk for convenience
+
+  In reality this data probably comes over the network from a database.
+
+- data stored in flat `List`
+
   1. Easy queries via LINQ.
   2. No data access patterns to optimise for.
+
+- simple data as structs
+
+  Communicates that the data is plain. Could help performance
+  at scale.
